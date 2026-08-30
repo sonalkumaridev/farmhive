@@ -5,10 +5,12 @@ import cors from "cors";
 import fs from "fs";
 import path from "path";
 import { body, validationResult } from "express-validator";
+dotenv.config();
+
 import connectDB from "./config/db.js";
 import contactRouter from "./routes/contact.route.js";
 
-dotenv.config();
+
 
 // Database connection
 await connectDB();
