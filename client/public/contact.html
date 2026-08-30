@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact FarmHive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+
+  *{
+    overflow: hidden;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: "Poppins", Arial, sans-serif;
+    color: #FFD700;
+
+    /* Background Image */
+    background-image: url("/contact_background.png");
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 60px;
+  }
+
+  .container {
+    width: 450px;
+    background: rgba(0, 0, 0, 0.68);
+    padding: 40px;   /* Balanced padding */
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
+    animation: floatIn 0.8s ease-out;
+    backdrop-filter: blur(3px);
+
+  }
+
+  @keyframes floatIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  h2 {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+  }
+
+  input,
+  textarea {
+    padding: 14px;
+    border-radius: 10px;
+    border: 2px solid #FFD700;
+    background: #000;
+    color: #FFD700;
+    width: 80%;
+    margin: 10px auto; 
+    padding-right:150 px ;      /* Center spacing */
+    display: block;          /* Forces true centering */
+    font-size: 16px;
+    transition: 0.3s ease;
+    outline: none;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: #fff176;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    transform: scale(1.02);
+  }
+
+  button {
+    background: #FFD700;
+    color: #000;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: 0.3s ease;
+  }
+
+  button:hover {
+    background: #ffea62;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 120, 0.4);
+  }
+
+  p.status {
+    margin-top: 15px;
+    text-align: center;
+    min-height: 20px;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      justify-content: center;
+      padding-left: 0;
+    }
+    .container {
+      width: 92%;
+      padding: 28px;
+    }
+  }
+
+</style>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Contact FarmHive</h2>
+
+    <form id="contactForm">
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
+      <input type="email" id="email" name="email" placeholder="Your Email" required />
+      <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <p id="status" class="status"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const statusMsg = document.getElementById("status");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      statusMsg.textContent = "Sending...";
+
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value,
+      };
+
+      try {
+        const res = await fetch("http://localhost:5000/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          statusMsg.textContent = "Message sent successfully!";
+          form.reset();
+        } else {
+          statusMsg.textContent = "Failed to send message.";
+        }
+      } catch (error) {
+        console.error("Contact form error:", error);
+        statusMsg.textContent = "Server error.";
+      }
+    });
+  </script>
+
+</body>
+</html>
